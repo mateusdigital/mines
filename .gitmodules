@@ -1,0 +1,3 @@
+[submodule "libs/mcow_gb"]
+	path = libs/mcow_gb
+	url = https://gitlab.com/stdmatt-libs/mcow_gb
