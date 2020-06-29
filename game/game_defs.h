@@ -11,6 +11,13 @@
 #define SCREEN_TYPE_SPLASH  0
 #define SCREEN_TYPE_GAME    2
 
+#define BACKGROUND_MAX_COLS     20
+#define BACKGROUND_MAX_ROWS     18
+#define BACKGROUND_TILES_COUNT 360 // 20w x 18h
+
+#define FIELD_MAX_COLS    10
+#define FIELD_MAX_ROWS     9
+#define FIELD_ARRAY_SIZE  90
 
 
 #endif // __GAME_DEFS_H__

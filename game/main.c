@@ -3,10 +3,11 @@
 // Resources
 #include "tiles/tiles.c"
 // Entities
+#include "objects/field.c"
+#include "objects/background.c"
 // Screens
 #include "screen/screens.c"
 #include "screen/screen_game.c"
-
 
 //----------------------------------------------------------------------------//
 // Helper Functions                                                           //
