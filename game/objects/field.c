@@ -2,6 +2,12 @@
 #include "objects/field.h"
 
 //----------------------------------------------------------------------------//
+// MACROS                                                                     //
+//----------------------------------------------------------------------------//
+#define FIELD_INDEX(y, x) (x + y * FIELD_MAX_COLS)
+
+
+//----------------------------------------------------------------------------//
 // Vars                                                                       //
 //----------------------------------------------------------------------------//
 // Public
@@ -11,7 +17,8 @@ U8 FieldCols;
 U8 FieldRows;
 U8 MinesCount;
 
-#define FIELD_INDEX(y, x) (x + y * FIELD_MAX_COLS)
+// Private
+U8 _flood_fill_indices[FIELD_ARRAY_SIZE];
 
 
 //----------------------------------------------------------------------------//
@@ -83,6 +90,9 @@ Field_Init()
 {
     _Field_PlaceMines();
 }
+
+
+//------------------------------------------------------------------------------
 void
 _FieldPrint(U8 p)
 {
@@ -109,7 +119,7 @@ _FieldPrint(U8 p)
     }
 }
 
-U8 flood_fill[FIELD_ARRAY_SIZE];
+//------------------------------------------------------------------------------
 void
 Field_Open(I8 y, I8 x)
 {
@@ -117,29 +127,49 @@ Field_Open(I8 y, I8 x)
     I8 j;
 
     I8 index;
-    I8 flood_fill_count;
-    I8 flood_fill_index;
+    I8 flood_fill_indices_count;
+    I8 flood_fill_indices_index;
     I8 xx;
     I8 yy;
 
+    //
+    // Check if the position is good to be opened.
+    index = FIELD_INDEX(y, x);
+    if(IS_OPENED(Field[index])) {
+        #if _PRINT_INFO
+            gprintxy(0, 12, "Already open: %d %d", y, x);
+        #endif // _PRINT_INFO
+        return;
+    } else if(IS_FLAGGED(Field[index])) {
+        #if _PRINT_INFO
+            gprintxy(0, 12, "Flagged: %d %d", y, x);
+        #endif // _PRINT_INFO
+        return;
+    } else if(HAS_BOMB(Field[index])) {
+        return;
+    }
+
     y = 0;
     x = 0;
-
     xx = 0;
     yy = 0;
 
     //
     // Reset the flood fill vars.
-    flood_fill_count = 1;
-    flood_fill_index = 0;
-    flood_fill[0]    = FIELD_INDEX(y, x);
+    flood_fill_indices_count = 1;
+    flood_fill_indices_index = 0;
+    _flood_fill_indices[0]   = index;
 
 
     // _FieldPrint(1);
-    while(flood_fill_index < flood_fill_count) {
-        index = flood_fill[flood_fill_index];
-        Field[index] |= MASK_OPEN;
-        ++flood_fill_index;
+    while(flood_fill_indices_index < flood_fill_indices_count) {
+        index = _flood_fill_indices[flood_fill_indices_index];
+        ++flood_fill_indices_index;
+
+        if(IS_FLAGGED(Field[index])) {
+            continue;
+        }
+        SET_OPEN(Field[index]);
 
         x = (index % FieldCols);
         y = (index / FieldCols);
@@ -175,16 +205,26 @@ Field_Open(I8 y, I8 x)
 
                 // Has surrounding bombs...
                 if(MINES_VALUE(Field[index]) != 0) {
-                    Field[index] |= MASK_OPEN;
+                    if(!IS_FLAGGED(Field[index])) {
+                        SET_OPEN(Field[index]);
+                    }
                     continue;
                 }
 
-                flood_fill[flood_fill_count] = index;
-                ++flood_fill_count;
+                _flood_fill_indices[flood_fill_indices_count] = index;
+                ++flood_fill_indices_count;
             }
         }
     }
+}
 
-        //  gprintxy(8, 10, "DONE...");
-        //  _FieldPrint(0);
+//------------------------------------------------------------------------------
+void
+Field_ToggleFlag(I8 y, I8 x)
+{
+    I8 index = FIELD_INDEX(y, x);
+    if(IS_OPENED(Field[index])) {
+        return;
+    }
+    TOGGLE_FLAG(Field[index]);
 }

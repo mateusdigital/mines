@@ -19,5 +19,6 @@
 #define FIELD_MAX_ROWS   9
 #define FIELD_ARRAY_SIZE   (FIELD_MAX_COLS * FIELD_MAX_ROWS)
 
+#define _PRINT_INFO 1
 
 #endif // __GAME_DEFS_H__

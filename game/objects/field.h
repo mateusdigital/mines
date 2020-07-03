@@ -29,8 +29,8 @@
 #define MINES_VALUE(_byte_) (((_byte_) & MASK_VALUE)     )
 
 
-#define SET_OPEN(_byte_)    ((_byte_) | MASK_OPEN)
-#define TOGGLE_FLAG(_byte_) ((_byte_) ^ MASK_FLAG)
+#define SET_OPEN(_byte_)    ((_byte_) |= MASK_OPEN)
+#define TOGGLE_FLAG(_byte_) ((_byte_) ^= MASK_FLAG)
 
 
 //----------------------------------------------------------------------------//
@@ -47,6 +47,9 @@ extern U8 MinesCount;
 // Functions                                                                  //
 //----------------------------------------------------------------------------//
 void Field_Init();
-void Field_Open(I8 y, I8 x);
+
+void Field_Open      (I8 y, I8 x);
+void Field_ToggleFlag(I8 y, I8 x);
+
 
 #endif // __FIELD_H__
