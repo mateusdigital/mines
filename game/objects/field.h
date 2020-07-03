@@ -15,11 +15,13 @@
 // ||||_ 1 - is open.
 // |||__ 1 - is flag.
 // ||___ 1 - has bomb.
-// |____ 0 - unused.
-#define MASK_OPEN  (0x10)
-#define MASK_FLAG  (0x20)
-#define MASK_BOMB  (0x40)
-#define MASK_VALUE (0x0F)
+// |____ 1 - has being used on the flood fill opening.
+#define MASK_OPEN       (0x10)
+#define MASK_FLAG       (0x20)
+#define MASK_BOMB       (0x40)
+#define MASK_FLOOD_FILL (0x80)
+#define MASK_VALUE      (0x0F)
+
 
 #define HAS_BOMB(_byte_)    (((_byte_) & MASK_BOMB)  != 0)
 #define IS_OPENED(_byte_)   (((_byte_) & MASK_OPEN)  != 0)
@@ -45,5 +47,6 @@ extern U8 MinesCount;
 // Functions                                                                  //
 //----------------------------------------------------------------------------//
 void Field_Init();
+void Field_Open(I8 y, I8 x);
 
 #endif // __FIELD_H__

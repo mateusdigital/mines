@@ -9,6 +9,7 @@
 // Public
 U8 BackgroundTiles[BACKGROUND_TILES_COUNT];
 
+
 //----------------------------------------------------------------------------//
 // Private Functions                                                          //
 //----------------------------------------------------------------------------//
@@ -29,7 +30,6 @@ _Bkg_SetTile(U8 field_y, U8 field_x)
     if(HAS_BOMB(field_value)) {
         tile_id = TILE_ID_BOMB;
     }
-
     else if(IS_FLAGGED(field_value)) {
         tile_id = TILE_ID_FLAG;
     } else if(IS_OPENED(field_value)) {
@@ -53,11 +53,10 @@ _Bkg_SetTile(U8 field_y, U8 field_x)
 void
 Bkg_Init()
 {
-    move_bkg(0, 0);
     set_bkg_data(0, 128, TILES_OBJECTS);
+   Bkg_Refresh();
 
-
-    Bkg_Refresh();
+    move_bkg(0, 0);
 }
 
 //------------------------------------------------------------------------------

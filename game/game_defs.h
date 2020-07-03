@@ -15,9 +15,9 @@
 #define BACKGROUND_MAX_ROWS     18
 #define BACKGROUND_TILES_COUNT 360 // 20w x 18h
 
-#define FIELD_MAX_COLS    10
-#define FIELD_MAX_ROWS     9
-#define FIELD_ARRAY_SIZE  90
+#define FIELD_MAX_COLS  10
+#define FIELD_MAX_ROWS   9
+#define FIELD_ARRAY_SIZE   (FIELD_MAX_COLS * FIELD_MAX_ROWS)
 
 
 #endif // __GAME_DEFS_H__
