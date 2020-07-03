@@ -119,18 +119,21 @@ _FieldPrint(U8 p)
     }
 }
 
+U8 flood_fill_indices_count;
+U8 flood_fill_indices_index;
 //------------------------------------------------------------------------------
-void
+U8
 Field_Open(I8 y, I8 x)
 {
     I8 i;
     I8 j;
 
     I8 index;
-    I8 flood_fill_indices_count;
-    I8 flood_fill_indices_index;
     I8 xx;
     I8 yy;
+
+    flood_fill_indices_count = 0;
+    flood_fill_indices_index = 0;
 
     //
     // Check if the position is good to be opened.
@@ -139,14 +142,14 @@ Field_Open(I8 y, I8 x)
         #if _PRINT_INFO
             gprintxy(0, 12, "Already open: %d %d", y, x);
         #endif // _PRINT_INFO
-        return;
+        return FIELD_OPEN_RET_NONE;
     } else if(IS_FLAGGED(Field[index])) {
         #if _PRINT_INFO
             gprintxy(0, 12, "Flagged: %d %d", y, x);
         #endif // _PRINT_INFO
-        return;
+        return FIELD_OPEN_RET_NONE;
     } else if(HAS_BOMB(Field[index])) {
-        return;
+        return FIELD_OPEN_RET_BOMB;
     }
 
     y = 0;
@@ -216,6 +219,8 @@ Field_Open(I8 y, I8 x)
             }
         }
     }
+
+    return flood_fill_indices_count;
 }
 
 //------------------------------------------------------------------------------

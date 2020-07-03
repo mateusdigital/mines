@@ -5,6 +5,8 @@
 // Entities
 #include "objects/field.c"
 #include "objects/background.c"
+#include "objects/breaking_block.c"
+#include "objects/cursor.c"
 // Screens
 #include "screen/screens.c"
 #include "screen/screen_game.c"
