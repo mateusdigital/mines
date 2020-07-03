@@ -62,7 +62,6 @@ Bkg_Init()
         }
     }
     Bkg_Refresh();
-
     move_bkg(0, 0);
 }
 
@@ -91,4 +90,18 @@ void
 Bkg_ResetShakeOffset()
 {
     move_bkg(0, 0);
+}
+
+
+void
+Bkg_UpdateTile(U8 y, U8 x)
+{
+
+    _Bkg_SetTile(y, x);
+    #if _PRINT_INFO
+        _FieldPrint(1);
+    #else
+        _Bkg_SetTile(y, x);
+        set_bkg_tiles(0, 0, 20, 18, BackgroundTiles);
+    #endif // _PRINT_INFO
 }

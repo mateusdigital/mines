@@ -29,8 +29,8 @@ _BreakingBlocks_ResetBlock(U8 index)
     U8 field_y;
 
     if(_CurrentDestroyedBlocks < _BlocksToDestroyCount) {
-        field_x = FieldFloodFillIndices[_CurrentDestroyedBlocks] % FieldCols;
-        field_y = FieldFloodFillIndices[_CurrentDestroyedBlocks] / FieldCols;
+        field_x = Field_OpenIndices[_CurrentDestroyedBlocks] % FieldCols;
+        field_y = Field_OpenIndices[_CurrentDestroyedBlocks] / FieldCols;
 
         // gprintxy(0, 10, "RB: %u", index);
         BreakingBlocks[index].x = field_x * TILE_SIZE_x2 + FIRST_PIXEL_X;
@@ -46,8 +46,7 @@ _BreakingBlocks_ResetBlock(U8 index)
         ++_CurrentDestroyedBlocks;
         ++_CurrentAnimating;
 
-        _Bkg_SetTile(field_y, field_x);
-        set_bkg_tiles(0, 0, 20, 18, BackgroundTiles);
+        Bkg_UpdateTile(field_y, field_x);
     } else {
         BreakingBlocks[index].is_alive = FALSE;
     }
@@ -110,9 +109,12 @@ BreakingBlocks_Start(U8 count)
 BOOL
 BreakingBlocks_HasFinished()
 {
-    return (_CurrentAnimating == 0)
-        && (_CurrentDestroyedBlocks >= _BlocksToDestroyCount);
-
+    #if _PRINT_INFO
+        return TRUE;
+    #else
+        return (_CurrentAnimating == 0)
+            && (_CurrentDestroyedBlocks >= _BlocksToDestroyCount);
+    #endif
 }
 
 //------------------------------------------------------------------------------
@@ -137,13 +139,20 @@ BreakingBlocks_Update()
 {
     U8 index;
     for(index = 0; index < BREAKING_BLOCKS_COUNT; ++index) {
-        --BreakingBlocks[index].animation_time;
-        if(BreakingBlocks[index].animation_time == 1 || !BreakingBlocks[index].is_alive) {
-            if(_CurrentAnimating != 0) {
+        if(BreakingBlocks_HasFinished()) {
+            return;
+        }
+
+        if(BreakingBlocks[index].is_alive) {
+            --BreakingBlocks[index].animation_time;
+            _BreakingBlocks_MoveSprite(index);
+
+            if(BreakingBlocks[index].animation_time == 1) {
+                BreakingBlocks[index].is_alive = FALSE;
                 --_CurrentAnimating;
             }
+        } else {
             _BreakingBlocks_ResetBlock(index);
         }
-        _BreakingBlocks_MoveSprite(index);
     }
 }

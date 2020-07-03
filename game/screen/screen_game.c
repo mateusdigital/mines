@@ -40,7 +40,7 @@ Game_Init()
     FieldCols  = FIELD_MAX_COLS;
     MinesCount = 3;
 
-    Random_Init(DIV_REG);
+    Random_Init(4);
 
     Field_Init         ();
     Bkg_Init           ();
@@ -67,27 +67,30 @@ Game_Update()
         // Selecting
         if(GameState == GAME_STATE_SELECTING) {
             Cursor_Update();
-
             //
             // Open.
             if(JOY_CLICK(J_A)) {
-                FieldOpenReturnValue = Field_Open(
-                    (Cursor.y - FIRST_PIXEL_Y) / TILE_SIZE_x2,
-                    (Cursor.x - FIRST_PIXEL_X) / TILE_SIZE_x2
-                );
+                Field_ToOpenY = ((Cursor.y - FIRST_PIXEL_Y) / TILE_SIZE_x2);
+                Field_ToOpenX = ((Cursor.x - FIRST_PIXEL_X) / TILE_SIZE_x2);
 
-                // Hit a bomb :(
-                if(FieldOpenReturnValue == FIELD_OPEN_RET_BOMB) {
-                    GameState = GAME_STATE_ANIMATING_BOMB;
+                // Didn't opened nothing...
+                if(!Field_FindIndicesToOpen()) {
+                    goto END_OF_FRAME;
                 }
-                // No bomb - Possible multiple blocks to open...
-                else if(FieldOpenReturnValue != FIELD_OPEN_RET_NONE) {
+
+                // Opened blocks...
+                //   Now check if the was a bomb or not.
+                //   If was a bomb start the bomb opening animation
+                //   otherwise start the blocks opening animation.
+                if(HAS_BOMB(Field[Field_OpenIndices[0]])) {
+                    GameState = GAME_STATE_ANIMATING_BOMB;
+                } else {
                     GameState = GAME_STATE_ANIMATING_OPEN;
 
-                    BreakingBlocks_Start(FieldOpenReturnValue);
+                    BreakingBlocks_Start(Field_OpenIndicesCount);
                     Shake_Reset(
                         2, // frames per loop
-                        FieldOpenReturnValue * BREAKING_BLOCK_ANIMATION_TIME_MAX,
+                        0xFF, // @TODO(stdmatt): Remove magic numbers...
                         4, // max x
                         4  // max y
                     );
@@ -112,20 +115,19 @@ Game_Update()
             // Finished to animate all the opening blocks...
             if(BreakingBlocks_HasFinished()) {
                 GameState = GAME_STATE_SELECTING;
-                BreakingBlocks_End();
+                BreakingBlocks_End  ();
                 Bkg_ResetShakeOffset();
             }
         }
 
         //
         // Animating Bomb.
-        else if(FieldOpenReturnValue == FIELD_OPEN_RET_BOMB) {
+        else if(FieldOpenReturnValue == GAME_STATE_ANIMATING_BOMB) {
         }
 
-        Input_EndFrame();
 
-        //
-        // Refresh
+END_OF_FRAME:
+        Input_EndFrame();
         Delay(_delay);
         wait_vbl_done();
     }

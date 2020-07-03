@@ -42,20 +42,19 @@ extern U8 FieldCols;
 extern U8 FieldRows;
 extern U8 MinesCount;
 
-extern U8 FieldFloodFillIndices[FIELD_ARRAY_SIZE];
+extern U8 Field_OpenIndices[FIELD_ARRAY_SIZE];
+extern U8 Field_OpenIndicesCount;
 
-extern U8 flood_fill_indices_count;
-extern U8 flood_fill_indices_index;
-
-#define FIELD_OPEN_RET_NONE 0
-#define FIELD_OPEN_RET_BOMB 0xFF
 
 //----------------------------------------------------------------------------//
 // Functions                                                                  //
 //----------------------------------------------------------------------------//
 void Field_Init();
 
-U8   Field_Open      (I8 y, I8 x);
+I16 Field_ToOpenX;
+I16 Field_ToOpenY;
+
+BOOL Field_FindIndicesToOpen();
 void Field_ToggleFlag(I8 y, I8 x);
 
 

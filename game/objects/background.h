@@ -30,4 +30,5 @@ void Bkg_Refresh();
 void Bkg_UpdateShakeOffset();
 void Bkg_ResetShakeOffset ();
 
+void Bkg_UpdateTile(U8 y, U8 x);
 #endif // __BACKGROUND_H__

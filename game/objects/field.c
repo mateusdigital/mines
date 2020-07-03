@@ -17,9 +17,10 @@ U8 FieldCols;
 U8 FieldRows;
 U8 MinesCount;
 
+U8 Field_OpenIndicesCount;
 // Private
-U8 FieldFloodFillIndices[FIELD_ARRAY_SIZE];
-
+U8 Field_OpenIndices[FIELD_ARRAY_SIZE];
+U8 flood_fill_indices_index;
 
 //----------------------------------------------------------------------------//
 // Private Functions                                                          //
@@ -96,7 +97,6 @@ Field_Init()
 void
 _FieldPrint(U8 p)
 {
-    U8 index;
     U8 i, j;
     U8 field_value;
 
@@ -119,11 +119,10 @@ _FieldPrint(U8 p)
     }
 }
 
-U8 flood_fill_indices_count;
-U8 flood_fill_indices_index;
+
 //------------------------------------------------------------------------------
-U8
-Field_Open(I8 y, I8 x)
+BOOL
+Field_FindIndicesToOpen()
 {
     I8 i;
     I8 j;
@@ -132,74 +131,76 @@ Field_Open(I8 y, I8 x)
     I8 xx;
     I8 yy;
 
-    flood_fill_indices_count = 0;
-    flood_fill_indices_index = 0;
+    index = FIELD_INDEX(Field_ToOpenY, Field_ToOpenX);
+
+    //
+    // Reset the indices that were opened.
+    Field_OpenIndicesCount   = 1;     // Always open at least one
+    flood_fill_indices_index = 0;     // Start from the beginning.
+    Field_OpenIndices[0]     = index; // Actually if is already open it will return false...
+
+
+    #if _PRINT_INFO
+        gprintxy(0, 14, "---xxx : %d", (I16)Field_ToOpenY);
+        gprintxy(0, 15, "---xxx : %d", (I16)Field_ToOpenX);
+        gprintxy(0, 16, "---xxx : %d", index);
+    #endif
 
     //
     // Check if the position is good to be opened.
-    index = FIELD_INDEX(y, x);
     if(IS_OPENED(Field[index])) {
         #if _PRINT_INFO
-            gprintxy(0, 12, "Already open: %d %d", y, x);
+            gprintxy(0, 15, "Value: %x", Field[index]);
+            gprintxy(0, 12, "Already open: %d", Field_ToOpenY);
+            gprintxy(0, 13, "Already open: %d", Field_ToOpenX);
         #endif // _PRINT_INFO
-        return FIELD_OPEN_RET_NONE;
+        return FALSE;
     } else if(IS_FLAGGED(Field[index])) {
         #if _PRINT_INFO
-            gprintxy(0, 12, "Flagged: %d %d", y, x);
+            gprintxy(0, 12, "Flagged: %d %d", Field_ToOpenY, Field_ToOpenX);
         #endif // _PRINT_INFO
-        return FIELD_OPEN_RET_NONE;
+        return FALSE;
     } else if(HAS_BOMB(Field[index])) {
-        return FIELD_OPEN_RET_BOMB;
+        return TRUE;
     }
 
-    y = 0;
-    x = 0;
+    Field_ToOpenY = 0;
+    Field_ToOpenX = 0;
     xx = 0;
     yy = 0;
 
-    //
-    // Reset the flood fill vars.
-    flood_fill_indices_count = 1;
-    flood_fill_indices_index = 0;
-    FieldFloodFillIndices[0]   = index;
-
-
-    // _FieldPrint(1);
-    while(flood_fill_indices_index < flood_fill_indices_count) {
-        index = FieldFloodFillIndices[flood_fill_indices_index];
+    // We start from with at least one index and while we find things
+    // to open we continue to "push" things on the Field_OpenIndices array
+    // the worst case is when there's no mines, so all the field will be opened.
+    while(flood_fill_indices_index < Field_OpenIndicesCount) {
+        index = Field_OpenIndices[flood_fill_indices_index];
         ++flood_fill_indices_index;
 
         if(IS_FLAGGED(Field[index])) {
             continue;
         }
-        SET_OPEN(Field[index]);
+        // SET_OPEN(Field[index]);
 
-        x = (index % FieldCols);
-        y = (index / FieldCols);
+        // Tranform the index in X,Y coords again so it's easier to check
+        // if the thing is inside the board bounds.
+        Field_ToOpenX = (index % FieldCols);
+        Field_ToOpenY = (index / FieldCols);
         for(i = -1; i <= +1; ++i) {
-            yy = (i + y);
+            yy = (i + Field_ToOpenY);
 
-            // gprintxy(5, 5, "...........");
-            // gprintxy(5, 5, "i: %d y: %d", i, yy);
             // Out of bounds...
             if((yy < 0)|| (yy >= FIELD_MAX_ROWS)) {
                 continue;
             }
             for(j = -1; j <= +1; ++j) {
-                xx = (j + x);
-
-                // gprintxy(5, 6, "...........");
-                // gprintxy(5, 6, "j: %d x: %d ", j, xx);
+                xx = (j + Field_ToOpenX);
 
                 // Out of bounds...
                 if((xx < 0) || (xx >= FIELD_MAX_COLS)) {
                     continue;
                 }
 
-                // gprintxy(5, 8, "  %d (%d) %d (%d)   ", yy, i,  xx, j);
                 index = FIELD_INDEX(yy, xx);
-                // waitpad(J_A);
-
                 // Already participated on the flood fill algorithm.
                 if((Field[index] & MASK_FLOOD_FILL) != 0) {
                     continue;
@@ -208,19 +209,19 @@ Field_Open(I8 y, I8 x)
 
                 // Has surrounding bombs...
                 if(MINES_VALUE(Field[index]) != 0) {
-                    if(!IS_FLAGGED(Field[index])) {
-                        SET_OPEN(Field[index]);
-                    }
                     continue;
                 }
 
-                FieldFloodFillIndices[flood_fill_indices_count] = index;
-                ++flood_fill_indices_count;
+                Field_OpenIndices[Field_OpenIndicesCount] = index;
+                ++Field_OpenIndicesCount;
             }
         }
     }
 
-    return flood_fill_indices_count;
+    for(i = 0; i < Field_OpenIndicesCount; ++i) {
+        SET_OPEN(Field[Field_OpenIndices[i]]);
+    }
+    return TRUE;
 }
 
 //------------------------------------------------------------------------------

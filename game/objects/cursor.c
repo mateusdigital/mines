@@ -53,6 +53,7 @@ Cursor_Update()
     //
     // Update Sprite.
     #if _PRINT_INFO
+        gprintxy(0, 11, "--%u %u", Cursor.y, Cursor.x);
         gprintxy(0, 10, "%u %u",  (Cursor.y - FIRST_PIXEL_Y) / TILE_SIZE_x2, (Cursor.x - FIRST_PIXEL_X) / TILE_SIZE_x2);
     #else
         ++Cursor.blink_frame;
