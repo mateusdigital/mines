@@ -67,6 +67,7 @@ Game_Update()
         // Selecting
         if(GameState == GAME_STATE_SELECTING) {
             Cursor_Update();
+
             //
             // Open.
             if(JOY_CLICK(J_A)) {
@@ -75,7 +76,7 @@ Game_Update()
 
                 // Didn't opened nothing...
                 if(!Field_FindIndicesToOpen()) {
-                    goto END_OF_FRAME;
+                    goto END_OF_FRAME; // @notice(stdmatt): First time in life that I used that...
                 }
 
                 // Opened blocks...
@@ -84,17 +85,19 @@ Game_Update()
                 //   otherwise start the blocks opening animation.
                 if(HAS_BOMB(Field[Field_OpenIndices[0]])) {
                     GameState = GAME_STATE_ANIMATING_BOMB;
+                    BreakingBlocks_Start(Field_OpenIndicesCount, TRUE);
                 } else {
                     GameState = GAME_STATE_ANIMATING_OPEN;
-
-                    BreakingBlocks_Start(Field_OpenIndicesCount);
-                    Shake_Reset(
-                        2, // frames per loop
-                        0xFF, // @TODO(stdmatt): Remove magic numbers...
-                        4, // max x
-                        4  // max y
-                    );
+                    BreakingBlocks_Start(Field_OpenIndicesCount, FALSE);
                 }
+
+
+                Shake_Reset(
+                    2, // frames per loop
+                    0xff,
+                    4, // max x
+                    4  // max y
+                );
             }
             //
             // Flag
@@ -122,7 +125,18 @@ Game_Update()
 
         //
         // Animating Bomb.
-        else if(FieldOpenReturnValue == GAME_STATE_ANIMATING_BOMB) {
+        else if(GameState == GAME_STATE_ANIMATING_BOMB) {
+            BreakingBlocks_Update();
+            Shake_Update         ();
+            Bkg_UpdateShakeOffset();
+
+            // Finished to animate all the opening blocks...
+            if(BreakingBlocks_HasFinished()) {
+                BreakingBlocks_End  ();
+                Shake_Stop          ();
+                Bkg_ResetShakeOffset();
+
+            }
         }
 
 

@@ -15,10 +15,13 @@ typedef struct BreakingBlock_Tag {
 } BreakingBlock_t;
 
 
-BreakingBlock_t BreakingBlocks[BREAKING_BLOCKS_COUNT];
+BreakingBlock_t BreakingBlocks[BREAKING_BLOCKS_MAX_COUNT];
+
 U8 _BlocksToDestroyCount;
 U8 _CurrentDestroyedBlocks;
 U8 _CurrentAnimating;
+U8 _IsBombOpening;
+U8 _BreakingBlocksCount;
 
 
 //------------------------------------------------------------------------------
@@ -27,11 +30,13 @@ _BreakingBlocks_ResetBlock(U8 index)
 {
     U8 field_x;
     U8 field_y;
+    U8 duration;
 
     if(_CurrentDestroyedBlocks < _BlocksToDestroyCount) {
         field_x = Field_OpenIndices[_CurrentDestroyedBlocks] % FieldCols;
         field_y = Field_OpenIndices[_CurrentDestroyedBlocks] / FieldCols;
 
+        duration =
         // gprintxy(0, 10, "RB: %u", index);
         BreakingBlocks[index].x = field_x * TILE_SIZE_x2 + FIRST_PIXEL_X;
         BreakingBlocks[index].y = field_y * TILE_SIZE_x2 + FIRST_PIXEL_Y;
@@ -42,7 +47,6 @@ _BreakingBlocks_ResetBlock(U8 index)
             BREAKING_BLOCK_ANIMATION_TIME_MIN,
             BREAKING_BLOCK_ANIMATION_TIME_MAX
         );
-
         ++_CurrentDestroyedBlocks;
         ++_CurrentAnimating;
 
@@ -81,7 +85,7 @@ BreakingBlocks_Init()
     U8 index;
     U8 sprite_index;
 
-    for(index = 0; index < BREAKING_BLOCKS_COUNT; ++index) {
+    for(index = 0; index < _BreakingBlocksCount; ++index) {
         sprite_index = BREAKING_BLOCK_SPRITE_ID_FIRST * (index + 1);
         set_sprite_tile(sprite_index + 0, BREAKING_BLOCK_TILE_NO_FIRST    );
         set_sprite_tile(sprite_index + 1, BREAKING_BLOCK_TILE_NO_FIRST + 1);
@@ -92,16 +96,18 @@ BreakingBlocks_Init()
 
 //------------------------------------------------------------------------------
 void
-BreakingBlocks_Start(U8 count)
+BreakingBlocks_Start(U8 count, BOOL is_bomb_opening)
 {
     U8 index;
-    for(index = 0; index < BREAKING_BLOCKS_COUNT; ++index) {
+    for(index = 0; index < BREAKING_BLOCKS_MAX_COUNT; ++index) {
         BreakingBlocks[index].is_alive = FALSE;
     }
 
     _BlocksToDestroyCount   = count;
+    _IsBombOpening          = is_bomb_opening;
     _CurrentDestroyedBlocks = 0;
     _CurrentAnimating       = 0;
+    _BreakingBlocksCount    = is_bomb_opening ? BREAKING_BLOCKS_BOMB_COUNT : BREAKING_BLOCKS_OPEN_COUNT;
 }
 
 
@@ -123,7 +129,7 @@ BreakingBlocks_End()
 {
     U8 index;
     U8 sprite_index;
-    for(index = 0; index < BREAKING_BLOCKS_COUNT; ++index) {
+    for(index = 0; index < _BreakingBlocksCount; ++index) {
         sprite_index = BREAKING_BLOCK_SPRITE_ID_FIRST * (index + 1);
 
         move_sprite(sprite_index + 0, 0, 0);
@@ -138,7 +144,7 @@ void
 BreakingBlocks_Update()
 {
     U8 index;
-    for(index = 0; index < BREAKING_BLOCKS_COUNT; ++index) {
+    for(index = 0; index < _BreakingBlocksCount; ++index) {
         if(BreakingBlocks_HasFinished()) {
             return;
         }

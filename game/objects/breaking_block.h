@@ -9,7 +9,7 @@
 void BreakingBlocks_Init ();
 void BreakingBlocks_Reset();
 
-void BreakingBlocks_Start      (U8 count);
+void BreakingBlocks_Start      (U8 count, BOOL is_bomb_opening);
 BOOL BreakingBlocks_HasFinished();
 void BreakingBlocks_End        ();
 #endif // __BREAKING_BLOCK_H__

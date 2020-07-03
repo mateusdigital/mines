@@ -82,92 +82,36 @@ _Field_PlaceMines()
     }
 }
 
-//----------------------------------------------------------------------------//
-// Public Functions                                                           //
-//----------------------------------------------------------------------------//
-//------------------------------------------------------------------------------
 void
-Field_Init()
+_Field_FindBombs()
 {
-    _Field_PlaceMines();
-}
+    U8 i;
 
-
-//------------------------------------------------------------------------------
-void
-_FieldPrint(U8 p)
-{
-    U8 i, j;
-    U8 field_value;
-
-    gprintxy(0, 0, "Priting... %d %d\n", FIELD_MAX_ROWS, FIELD_MAX_COLS);
-    for(i = 0; i < FIELD_MAX_ROWS; ++i) {
-        for(j = 0; j < FIELD_MAX_COLS; ++j) {
-            field_value = Field[FIELD_INDEX(i, j)];
-            if(HAS_BOMB(field_value)) {
-                gprintxy(j, i, "*");
-            }
-            else if(IS_FLAGGED(field_value)) {
-                gprintxy(j, i, "F");
-            } else if(p || IS_OPENED(field_value)) {
-                gprintxy(j, i, "%c", '0' + MINES_VALUE(field_value));
-                //  '0' + MINES_VALUE(field_value);
-            } else {
-                gprintxy(j, i, ".");
-            }
+    flood_fill_indices_index = 0;
+    for(i = 0; i < FIELD_ARRAY_SIZE; ++i) {
+        if(HAS_BOMB(Field[i])) {
+            Field_OpenIndices[flood_fill_indices_index] = i;
+            ++flood_fill_indices_index;
         }
     }
+    Field_OpenIndicesCount = MinesCount;
 }
 
-
-//------------------------------------------------------------------------------
-BOOL
-Field_FindIndicesToOpen()
+void
+_Field_FindOpenBlocks()
 {
+    I8 index;
     I8 i;
     I8 j;
 
-    I8 index;
     I8 xx;
     I8 yy;
 
-    index = FIELD_INDEX(Field_ToOpenY, Field_ToOpenX);
-
-    //
-    // Reset the indices that were opened.
-    Field_OpenIndicesCount   = 1;     // Always open at least one
-    flood_fill_indices_index = 0;     // Start from the beginning.
-    Field_OpenIndices[0]     = index; // Actually if is already open it will return false...
-
-
-    #if _PRINT_INFO
-        gprintxy(0, 14, "---xxx : %d", (I16)Field_ToOpenY);
-        gprintxy(0, 15, "---xxx : %d", (I16)Field_ToOpenX);
-        gprintxy(0, 16, "---xxx : %d", index);
-    #endif
-
-    //
-    // Check if the position is good to be opened.
-    if(IS_OPENED(Field[index])) {
-        #if _PRINT_INFO
-            gprintxy(0, 15, "Value: %x", Field[index]);
-            gprintxy(0, 12, "Already open: %d", Field_ToOpenY);
-            gprintxy(0, 13, "Already open: %d", Field_ToOpenX);
-        #endif // _PRINT_INFO
-        return FALSE;
-    } else if(IS_FLAGGED(Field[index])) {
-        #if _PRINT_INFO
-            gprintxy(0, 12, "Flagged: %d %d", Field_ToOpenY, Field_ToOpenX);
-        #endif // _PRINT_INFO
-        return FALSE;
-    } else if(HAS_BOMB(Field[index])) {
-        return TRUE;
-    }
-
+    // Reset the vars...
     Field_ToOpenY = 0;
     Field_ToOpenX = 0;
-    xx = 0;
-    yy = 0;
+    xx            = 0;
+    yy            = 0;
 
     // We start from with at least one index and while we find things
     // to open we continue to "push" things on the Field_OpenIndices array
@@ -218,9 +162,80 @@ Field_FindIndicesToOpen()
         }
     }
 
-    for(i = 0; i < Field_OpenIndicesCount; ++i) {
-        SET_OPEN(Field[Field_OpenIndices[i]]);
+}
+
+
+//----------------------------------------------------------------------------//
+// Public Functions                                                           //
+//----------------------------------------------------------------------------//
+//------------------------------------------------------------------------------
+void
+Field_Init()
+{
+    _Field_PlaceMines();
+}
+
+
+//------------------------------------------------------------------------------
+void
+_FieldPrint(U8 p)
+{
+    U8 i, j;
+    U8 field_value;
+
+    gprintxy(0, 0, "Priting... %d %d\n", FIELD_MAX_ROWS, FIELD_MAX_COLS);
+    for(i = 0; i < FIELD_MAX_ROWS; ++i) {
+        for(j = 0; j < FIELD_MAX_COLS; ++j) {
+            field_value = Field[FIELD_INDEX(i, j)];
+            if(HAS_BOMB(field_value)) {
+                gprintxy(j, i, "*");
+            }
+            else if(IS_FLAGGED(field_value)) {
+                gprintxy(j, i, "F");
+            } else if(p || IS_OPENED(field_value)) {
+                gprintxy(j, i, "%c", '0' + MINES_VALUE(field_value));
+                //  '0' + MINES_VALUE(field_value);
+            } else {
+                gprintxy(j, i, ".");
+            }
+        }
     }
+}
+
+
+//------------------------------------------------------------------------------
+BOOL
+Field_FindIndicesToOpen()
+{
+    I8 index;
+    index = FIELD_INDEX(Field_ToOpenY, Field_ToOpenX);
+
+    //
+    // Reset the indices that were opened.
+    Field_OpenIndicesCount   = 1;     // Always open at least one
+    flood_fill_indices_index = 0;     // Start from the beginning.
+    Field_OpenIndices[0]     = index; // Actually if is already open it will return false...
+
+    //
+    // Check if the position is good to be opened.
+    if(IS_OPENED(Field[index])) {
+        return FALSE;
+    } else if(IS_FLAGGED(Field[index])) {
+        return FALSE;
+    }
+
+    if(HAS_BOMB(Field[index])) {
+        _Field_FindBombs();
+    } else {
+        _Field_FindOpenBlocks();
+    }
+
+    //
+    // Set them as open...
+    for(index = 0; index < Field_OpenIndicesCount; ++index) {
+        SET_OPEN(Field[Field_OpenIndices[index]]);
+    }
+
     return TRUE;
 }
 
