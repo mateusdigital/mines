@@ -5,19 +5,11 @@
 #include "game_defs.h"
 
 
-typedef struct BreakingBlock_Tag {
-    U8 x;
-    U8 y;
 
-    U8 blink_frame;
-    U8 animation_time;
-} BreakingBlock_t;
+void BreakingBlocks_Init ();
+void BreakingBlocks_Reset();
 
-extern BreakingBlock_t BreakingBlock;
-
-void BreakingBlock_Init();
-void BreakingBlock_Reset();
-void BreakingBlock_SetTilePos(U8 y, U8 x);
-void BreakingBlock_Update();
-
+void BreakingBlocks_Start      (U8 count);
+BOOL BreakingBlocks_HasFinished();
+void BreakingBlocks_End        ();
 #endif // __BREAKING_BLOCK_H__

@@ -42,7 +42,7 @@ extern U8 FieldCols;
 extern U8 FieldRows;
 extern U8 MinesCount;
 
-extern U8 _flood_fill_indices[FIELD_ARRAY_SIZE];
+extern U8 FieldFloodFillIndices[FIELD_ARRAY_SIZE];
 
 extern U8 flood_fill_indices_count;
 extern U8 flood_fill_indices_index;

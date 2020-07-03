@@ -24,8 +24,10 @@ extern U8 BackgroundTiles[BACKGROUND_TILES_COUNT];
 //----------------------------------------------------------------------------//
 // Functions                                                                  //
 //----------------------------------------------------------------------------//
-void Bkg_Init   ();
+void Bkg_Init();
 void Bkg_Refresh();
 
+void Bkg_UpdateShakeOffset();
+void Bkg_ResetShakeOffset ();
 
 #endif // __BACKGROUND_H__

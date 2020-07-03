@@ -18,7 +18,7 @@ U8 FieldRows;
 U8 MinesCount;
 
 // Private
-U8 _flood_fill_indices[FIELD_ARRAY_SIZE];
+U8 FieldFloodFillIndices[FIELD_ARRAY_SIZE];
 
 
 //----------------------------------------------------------------------------//
@@ -161,12 +161,12 @@ Field_Open(I8 y, I8 x)
     // Reset the flood fill vars.
     flood_fill_indices_count = 1;
     flood_fill_indices_index = 0;
-    _flood_fill_indices[0]   = index;
+    FieldFloodFillIndices[0]   = index;
 
 
     // _FieldPrint(1);
     while(flood_fill_indices_index < flood_fill_indices_count) {
-        index = _flood_fill_indices[flood_fill_indices_index];
+        index = FieldFloodFillIndices[flood_fill_indices_index];
         ++flood_fill_indices_index;
 
         if(IS_FLAGGED(Field[index])) {
@@ -214,7 +214,7 @@ Field_Open(I8 y, I8 x)
                     continue;
                 }
 
-                _flood_fill_indices[flood_fill_indices_count] = index;
+                FieldFloodFillIndices[flood_fill_indices_count] = index;
                 ++flood_fill_indices_count;
             }
         }

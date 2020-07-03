@@ -53,7 +53,14 @@ _Bkg_SetTile(U8 field_y, U8 field_x)
 void
 Bkg_Init()
 {
+    U8 i, j;
+
     set_bkg_data(0, 128, TILES_OBJECTS);
+    for(i = 0; i < FieldRows; ++i) {
+        for(j = 0; j < FieldCols; ++j) {
+            _Bkg_SetTile(i, j);
+        }
+    }
     Bkg_Refresh();
 
     move_bkg(0, 0);
@@ -66,14 +73,22 @@ Bkg_Refresh()
     #if _PRINT_INFO
         _FieldPrint(0);
     #else
-
-        U8 i, j;
-        for(i = 0; i < FieldRows; ++i) {
-            for(j = 0; j < FieldCols; ++j) {
-                _Bkg_SetTile(i, j);
-            }
-        }
-
         set_bkg_tiles(0, 0, 20, 18, BackgroundTiles);
     #endif
+}
+
+
+//------------------------------------------------------------------------------
+void
+Bkg_UpdateShakeOffset()
+{
+    move_bkg(Shake_x, Shake_y);
+}
+
+
+//------------------------------------------------------------------------------
+void
+Bkg_ResetShakeOffset()
+{
+    move_bkg(0, 0);
 }

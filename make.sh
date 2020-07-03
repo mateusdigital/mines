@@ -9,3 +9,4 @@ $CC -Igame -Ilibs/mcow_gb $FLAGS    -o build/main_linux.gb build/main_linux.o
 #  -DUSE_SFR_FOR_REG
 #  -DUSE_SFR_FOR_REG
 ${GBDKDIR}/bin/lcc -v
+echo "---------------------------------------------------------------------"

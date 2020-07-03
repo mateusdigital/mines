@@ -19,10 +19,8 @@
 //----------------------------------------------------------------------------//
 // Vars                                                                       //
 //----------------------------------------------------------------------------//
-U8 FieldOpenReturnValue;
-U8 FieldOpenAnimCurrIndex;
 U8 GameState;
-
+U8 FieldOpenReturnValue;
 
 //----------------------------------------------------------------------------//
 // Public Functions                                                           //
@@ -44,10 +42,10 @@ Game_Init()
 
     Random_Init(DIV_REG);
 
-    Field_Init        ();
-    Bkg_Init          ();
-    Cursor_Init       ();
-    BreakingBlock_Init();
+    Field_Init         ();
+    Bkg_Init           ();
+    Cursor_Init        ();
+    BreakingBlocks_Init();
 
     SHOW_BKG;
     SHOW_SPRITES;
@@ -64,6 +62,7 @@ Game_Update()
 
     while(1) {
         Input_BeginFrame();
+
         //
         // Selecting
         if(GameState == GAME_STATE_SELECTING) {
@@ -76,7 +75,6 @@ Game_Update()
                     (Cursor.y - FIRST_PIXEL_Y) / TILE_SIZE_x2,
                     (Cursor.x - FIRST_PIXEL_X) / TILE_SIZE_x2
                 );
-                Bkg_Refresh();
 
                 // Hit a bomb :(
                 if(FieldOpenReturnValue == FIELD_OPEN_RET_BOMB) {
@@ -84,13 +82,14 @@ Game_Update()
                 }
                 // No bomb - Possible multiple blocks to open...
                 else if(FieldOpenReturnValue != FIELD_OPEN_RET_NONE) {
-                    GameState              = GAME_STATE_ANIMATING_OPEN;
-                    FieldOpenAnimCurrIndex = 0;
+                    GameState = GAME_STATE_ANIMATING_OPEN;
 
-                    BreakingBlock_Reset();
-                    BreakingBlock_SetTilePos(
-                        _flood_fill_indices[FieldOpenAnimCurrIndex] / FieldCols,
-                        _flood_fill_indices[FieldOpenAnimCurrIndex] % FieldCols
+                    BreakingBlocks_Start(FieldOpenReturnValue);
+                    Shake_Reset(
+                        2, // frames per loop
+                        FieldOpenReturnValue * BREAKING_BLOCK_ANIMATION_TIME_MAX,
+                        4, // max x
+                        4  // max y
                     );
                 }
             }
@@ -101,29 +100,21 @@ Game_Update()
                     (Cursor.y - FIRST_PIXEL_Y) / TILE_SIZE_x2,
                     (Cursor.x - FIRST_PIXEL_X) / TILE_SIZE_x2
                 );
-                Bkg_Refresh();
             }
         }
         //
         // Animating Open.
         else if(GameState == GAME_STATE_ANIMATING_OPEN) {
+            BreakingBlocks_Update();
+            Shake_Update         ();
+            Bkg_UpdateShakeOffset();
+
             // Finished to animate all the opening blocks...
-            if(FieldOpenAnimCurrIndex == FieldOpenReturnValue) {
-                GameState == GAME_STATE_SELECTING;
-                continue;
+            if(BreakingBlocks_HasFinished()) {
+                GameState = GAME_STATE_SELECTING;
+                BreakingBlocks_End();
+                Bkg_ResetShakeOffset();
             }
-
-            BreakingBlock_Update();
-            if(BreakingBlock.animation_time == 0) {
-                BreakingBlock_Reset();
-                BreakingBlock_SetTilePos(
-                    _flood_fill_indices[FieldOpenAnimCurrIndex] / FieldCols,
-                    _flood_fill_indices[FieldOpenAnimCurrIndex] % FieldCols
-                );
-
-                ++FieldOpenAnimCurrIndex;
-            }
-
         }
 
         //
