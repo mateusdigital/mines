@@ -18,4 +18,7 @@ extern Cursor_t Cursor;
 void Cursor_Init  ();
 void Cursor_Update();
 
+void Cursor_Show();
+void Cursor_Hide();
+
 #endif //__CURSOR_H__

@@ -59,7 +59,6 @@ Bkg_Init()
 {
     U8 i, j;
 
-    set_bkg_data(0, 128, TILES_OBJECTS);
     for(i = 0; i < FieldRows; ++i) {
         for(j = 0; j < FieldCols; ++j) {
             _Bkg_SetTile(i, j);

@@ -6,7 +6,7 @@
 #include "objects/background.h"
 #include "objects/cursor.h"
 #include "objects/breaking_block.h"
-
+#include "ui/game_hud.h"
 
 //----------------------------------------------------------------------------//
 // Constants                                                                  //
@@ -16,11 +16,16 @@
 #define GAME_STATE_ANIMATING_BOMB 3
 
 
+#define GAME_SCREEN_FRAMES_BETWEEN_HAPPY_AND_NORMA_FACE 80
+
+
 //----------------------------------------------------------------------------//
 // Vars                                                                       //
 //----------------------------------------------------------------------------//
-U8 GameState;
-U8 FieldOpenReturnValue;
+U8  GameState;
+U8  GameTimer;
+U16 GameScore;
+
 
 //----------------------------------------------------------------------------//
 // Public Functions                                                           //
@@ -34,19 +39,38 @@ Game_Init()
     HIDE_BKG;
 
     set_sprite_data(0, 128, TILES_OBJECTS);
+    set_bkg_data   (0, 128, TILES_OBJECTS);
 
     GameState  = GAME_STATE_SELECTING;
+    GameTimer  = 0;
+    GameScore  = 0;
+
     FieldRows  = FIELD_MAX_ROWS;
     FieldCols  = FIELD_MAX_COLS;
     MinesCount = 3;
 
+    //
+    // Init the Game subsystems...
     Random_Init(4);
 
     Field_Init         ();
     Bkg_Init           ();
     Cursor_Init        ();
     BreakingBlocks_Init();
+    GameHud_Init       ();
 
+    //
+    // Setup the Hud.
+    GameHud_SetMinesCount(MinesCount);
+    GameHud_SetTimerCount(GameTimer );
+    GameHud_SetScoreCount(GameScore );
+    GameHud_Refresh();
+
+    //
+    // Setup the cursor.
+    Cursor_Show();
+
+    SHOW_WIN;
     SHOW_BKG;
     SHOW_SPRITES;
     VBK_REG = 0;
@@ -57,8 +81,12 @@ void
 Game_Update()
 {
     U8 _delay;
+    U8 _frames;
+
     Input_Reset();
-    _delay = 0;
+
+    _delay  = 0;
+    _frames = 0;
 
     while(1) {
         Input_BeginFrame();
@@ -91,7 +119,8 @@ Game_Update()
                     BreakingBlocks_Start(Field_OpenIndicesCount, FALSE);
                 }
 
-
+                Cursor_Hide();
+                GameHud_SetFaceState(GAME_HUD_FACE_STATE_WOW);
                 Shake_Reset(
                     2, // frames per loop
                     0xff,
@@ -118,8 +147,27 @@ Game_Update()
             // Finished to animate all the opening blocks...
             if(BreakingBlocks_HasFinished()) {
                 GameState = GAME_STATE_SELECTING;
+
+                // Stop the breaking animation.
                 BreakingBlocks_End  ();
+                Shake_Stop          ();
                 Bkg_ResetShakeOffset();
+
+                // Make the little guy happy ;D
+                GameHud_SetFaceStateTimed(
+                    GAME_HUD_FACE_STATE_HAPPY,
+                    GAME_SCREEN_FRAMES_BETWEEN_HAPPY_AND_NORMA_FACE,
+                    GAME_HUD_FACE_STATE_NORMAL
+                );
+
+                // Re-enable the cursor.
+                Cursor_Show();
+
+
+                // Calculate the score.
+                GameScore += (MinesCount * Field_OpenIndicesCount);
+                GameHud_SetScoreCount(GameScore);
+                GameHud_Refresh();
             }
         }
 
@@ -132,15 +180,26 @@ Game_Update()
 
             // Finished to animate all the opening blocks...
             if(BreakingBlocks_HasFinished()) {
+                // Stop the breaking animation...
                 BreakingBlocks_End  ();
                 Shake_Stop          ();
                 Bkg_ResetShakeOffset();
 
+                // Make the little guy dead :'(
+                GameHud_SetFaceState(GAME_HUD_FACE_STATE_DEAD);
             }
         }
 
 
-END_OF_FRAME:
+END_OF_FAME:
+        if(GameState == GAME_STATE_SELECTING && (++_frames >= 60)) {
+            _frames = 0;
+            ++GameTimer;
+            GameHud_SetTimerCount(GameTimer);
+            GameHud_Refresh();
+        }
+
+        GameHud_Update();
         Input_EndFrame();
         Delay(_delay);
         wait_vbl_done();
