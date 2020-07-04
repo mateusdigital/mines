@@ -27,13 +27,17 @@ _Bkg_SetTile(U8 field_y, U8 field_x)
     field_value = Field[field_index];
 
     tile_index = (U16)(field_x * 2) + (U16)field_y * 2 * (U16)BACKGROUND_MAX_COLS;
-    if(HAS_BOMB(field_value)) {
-        tile_id = TILE_ID_BOMB;
-    }
-    else if(IS_FLAGGED(field_value)) {
+    // if(HAS_BOMB(field_value)) {
+    //     tile_id = TILE_ID_BOMB;
+    // }
+   if(IS_FLAGGED(field_value)) {
         tile_id = TILE_ID_FLAG;
     } else if(IS_OPENED(field_value)) {
-        tile_id = (TILE_ID_OPEN + MINES_VALUE(field_value));
+        if(HAS_BOMB(field_value)) {
+            tile_id = TILE_ID_BOMB;
+        } else {
+            tile_id = (TILE_ID_OPEN + MINES_VALUE(field_value));
+        }
     } else {
         tile_id = TILE_ID_CLOSE;
     }
