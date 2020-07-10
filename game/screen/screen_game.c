@@ -191,7 +191,7 @@ Game_Update()
         }
 
 
-END_OF_FAME:
+END_OF_FRAME:
         if(GameState == GAME_STATE_SELECTING && (++_frames >= 60)) {
             _frames = 0;
             ++GameTimer;

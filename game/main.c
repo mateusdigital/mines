@@ -1,5 +1,5 @@
-// mcow_gb
-#include "mcow_gb/mcow_gb.c"
+// pw_gb
+#include "pw_gb/pw_gb.c"
 // Resources
 #include "tiles/tiles.c"
 // Entities

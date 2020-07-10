@@ -1,0 +1,3 @@
+[submodule "libs/pw_gb"]
+	path = libs/pw_gb
+	url = https://gitlab.com/stdmatt-libs/pw_gb

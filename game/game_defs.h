@@ -1,8 +1,8 @@
 #ifndef __GAME_DEFS_H__
 #define __GAME_DEFS_H__
 
-// mcow
-#include "mcow_gb/mcow_gb.h"
+// pw
+#include "pw_gb/pw_gb.h"
 
 
 //----------------------------------------------------------------------------//
