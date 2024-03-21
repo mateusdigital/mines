@@ -1,49 +1,38 @@
-// pw_gb
-#include "pw_gb/pw_gb.c"
-// Resources
-#include "tiles/tiles.c"
-// Entities
-#include "objects/field.c"
-#include "objects/background.c"
-#include "objects/breaking_block.c"
-#include "objects/cursor.c"
-// UI
-#include "ui/game_hud.c"
-// Screens
-#include "screen/screens.c"
-#include "screen/screen_game.c"
+#include <gb/gb.h>
+#include <stdint.h>
 
-//----------------------------------------------------------------------------//
-// Helper Functions                                                           //
-//----------------------------------------------------------------------------//
-//------------------------------------------------------------------------------
-void
-GameInit()
+#include "resources/game_tiles_tiles.h"
+#include "resources/game_tiles_tiles.c"
+// #include "resources/game_tiles_map.h"
+#include "resources/game_tiles_map.c"
+#include "resources/MenuMap.h"
+#include "resources/MenuMap.c"
+
+#include "resources/TestMap.h"
+#include "resources/TestMap.c"
+void main(void)
 {
-    disable_interrupts();
-    DISPLAY_OFF;
+    // Load tileset into GB memory
+     // Load the tile data into VRAM
+     // Fill entire screen with 1st tile
+    init_bkg(0);
+    set_bkg_data(0, game_tiles_tiles_count, game_tiles_tiles);
+    // set_bkg_tiles(0, 0, MenuMap_WIDTH, MenuMap_HEIGHT, MenuMap_TILES);
+    set_bkg_tiles(0, 0, TestMap_WIDTH, TestMap_HEIGHT, TestMap_TILES);
 
-    SPRITES_8x8;
+    // set_bkg_tiles(0, 0, game_tiles_map_width, game_tiles_map_height, game_tiles_map);
 
+
+    // Show background
     SHOW_BKG;
     SHOW_SPRITES;
-
     DISPLAY_ON;
-    enable_interrupts();
-}
 
-
-//----------------------------------------------------------------------------//
-// Entry Point                                                                //
-//----------------------------------------------------------------------------//
-//------------------------------------------------------------------------------
-void
-main()
-{
-    Screen_Change(SCREEN_TYPE_GAME);
-    // Screen_Change(SCREEN_TYPE_SPLASH);
-
-    while(1) {
-        Screen_Update();
+    move_sprite(0, 50, 50);
+    move_sprite(1, 50, 50);
+    while (1)
+    {
+        //   scroll_bkg(1, 0);
+        delay(200);
     }
 }
