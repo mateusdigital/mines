@@ -9,7 +9,7 @@
 //                 +                         +                                //
 //                      O      *        '       .                             //
 //                                                                            //
-//  File      : menu.c                                                        //
+//  File      : menu_screen.c                                                 //
 //  Project   : mines                                                         //
 //  Date      : 2024-03-21                                                    //
 //  License   : See project's COPYING.TXT for full info.                      //
@@ -20,11 +20,11 @@
 //                                                                            //
 //---------------------------------------------------------------------------~//
 
-#ifndef __MENU_C__
-#define __MENU_C__
+#ifndef __MENU_SCREEN_C__
+#define __MENU_SCREEN_C__
 
 //------------------------------------------------------------------------------
-#include "menu.h"
+#include "menu_screen.h"
 
 #include "game_defs.h"
 #include "globals.h"
@@ -79,9 +79,9 @@ void _update_icons();
 //
 
 // -----------------------------------------------------------------------------
-void menu_init()
+void menu_screen_init()
 {
-    curr_screen_func = &menu_draw;
+    curr_screen_func = &menu_screen_draw;
 
     set_bkg_tiles(0, 0, MenuMap_WIDTH, MenuMap_HEIGHT, MenuMap_TILES);
     move_bkg(0, 0);
@@ -93,7 +93,7 @@ void menu_init()
 }
 
 //------------------------------------------------------------------------------
-void menu_draw()
+void menu_screen_draw()
 {
     if(_selecting_level && JUST_PRESSED(J_LEFT)) {
         if(curr_level > 0) {
@@ -200,4 +200,4 @@ void _update_icons()
 }
 
 
-#endif // __MENU_C__
+#endif // __MENU_SCREEN_C__

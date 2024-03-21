@@ -9,7 +9,7 @@
 //                 +                         +                                //
 //                      O      *        '       .                             //
 //                                                                            //
-//  File      : menu.h                                                        //
+//  File      : menu_screen.h                                                 //
 //  Project   : mines                                                         //
 //  Date      : 2024-03-21                                                    //
 //  License   : See project's COPYING.TXT for full info.                      //
@@ -20,14 +20,14 @@
 //                                                                            //
 //---------------------------------------------------------------------------~//
 
-#ifndef __MENU_H__
-#define __MENU_H__
+#ifndef __MENU_SCREEN_H__
+#define __MENU_SCREEN_H__
 
 //------------------------------------------------------------------------------
 #include "mdgb.h"
 
 //------------------------------------------------------------------------------
-void menu_init(void);
-void menu_draw(void);
+void menu_screen_init(void);
+void menu_screen_draw(void);
 
-#endif // __MENU_H__
+#endif // __MENU_SCREEN_H__
