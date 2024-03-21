@@ -1,48 +1,41 @@
 #ifndef __GAME_DEFS_H__
 #define __GAME_DEFS_H__
 
-// pw
-#include "pw_gb/pw_gb.h"
 
-
-//----------------------------------------------------------------------------//
-// Game Constants                                                             //
-//----------------------------------------------------------------------------//
+//------------------------------------------------------------------------------
 #define SCREEN_TYPE_SPLASH  0
+#define SCREEN_TYPE_MENU    1
 #define SCREEN_TYPE_GAME    2
+#define SCREEN_TYPE_CREDITS 2
 
-#define BACKGROUND_MAX_COLS     20
-#define BACKGROUND_MAX_ROWS     18
-#define BACKGROUND_TILES_COUNT 360 // 20w x 18h
+//------------------------------------------------------------------------------
+#define LEVEL_INDEX_EASY   0
+#define LEVEL_INDEX_MEDIUM 1
+#define LEVEL_INDEX_HARD   2
 
-#define FIELD_MAX_COLS  10
-#define FIELD_MAX_ROWS   9
-#define FIELD_ARRAY_SIZE   (FIELD_MAX_COLS * FIELD_MAX_ROWS)
-
-#define _PRINT_INFO 0
-
-
+//------------------------------------------------------------------------------
 #define CURSOR_BLINK_FRAMES_COUNT 0x8
-#define CURSOR_TILE_NO_FIRST   52
-#define CURSOR_TILE_NO_LAST    55
-#define CURSOR_SPRITE_ID_FIRST  0
-#define CURSOR_SPRITE_ID_LAST   3
 
 
-//
-//
-//
-#define BREAKING_BLOCKS_MAX_COUNT          4
-#define BREAKING_BLOCKS_OPEN_COUNT         4
-#define BREAKING_BLOCKS_BOMB_COUNT         1
+//------------------------------------------------------------------------------
+#define TILE_INDEX_BLANK           0x0f
 
-#define BREAKING_BLOCK_ANIMATION_TIME_MIN 10
-#define BREAKING_BLOCK_ANIMATION_TIME_MAX 20
+#define TILE_INDEX_LETTERS_UPPER_A 0x30
 
-#define BREAKING_BLOCK_TILE_NO_FIRST    0  // 56
-#define BREAKING_BLOCK_TILE_NO_LAST     3  // 59
-#define BREAKING_BLOCK_SPRITE_ID_FIRST  4
-#define BREAKING_BLOCK_SPRITE_ID_LAST   7
+#define TILE_INDEX_ARROWS_DARK     0x90
+#define TILE_INDEX_ARROWS_LIGHT    0x94
+#define TILE_OFFSET_ARROWS_UP      0
+#define TILE_OFFSET_ARROWS_LEFT    1
+#define TILE_OFFSET_ARROWS_DOWN    2
+#define TILE_OFFSET_ARROWS_RIGHT   3
+
+#define TILE_INDEX_HEART_DARK  0x0E
+#define TILE_INDEX_HEART_LIGHT 0x1E
+
+//------------------------------------------------------------------------------
+#define CHAR_TO_TILE(C) (TILE_INDEX_LETTERS_UPPER_A + C - 'A')
+
+
 
 
 #endif // __GAME_DEFS_H__
