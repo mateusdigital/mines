@@ -9,7 +9,7 @@
 //                 +                         +                                //
 //                      O      *        '       .                             //
 //                                                                            //
-//  File      : globals.h                                                     //
+//  File      : game_background.c                                             //
 //  Project   : mines                                                         //
 //  Date      : 2024-03-21                                                    //
 //  License   : See project's COPYING.TXT for full info.                      //
@@ -20,17 +20,41 @@
 //                                                                            //
 //---------------------------------------------------------------------------~//
 
-#ifndef __GLOBALS_H__
-#define __GLOBALS_H__
+
+#ifndef __GAME_BACKGROUND_C__
+#define __GAME_BACKGROUND_C__
 
 //------------------------------------------------------------------------------
 #include "mdgb.h"
 #include "globals.h"
+#include "game_background.h"
+
+#define FIELD_MAX_ROWS = 16;
+#define FIELD_MAX_COLS = 16;
 
 //------------------------------------------------------------------------------
-extern u8 curr_screen_type;
-extern u8 curr_level;
+void game_background_init()
+{
+    u8 field_cols = 16;
+    u8 field_rows = 16;
 
-void (*curr_screen_func)();
+    for(u8 row = 0; row < field_rows; ++row) {
+        u8 row2 = row * 2;
+        for(u8 col = 0; col < field_cols; ++col) {
+            u8 col2 = col * 2;
 
-#endif // __GLOBALS_H__
+            set_bkg_tile_xy(col2    , row2    , 0x00);
+            set_bkg_tile_xy(col2 + 1, row2    , 0x01);
+            set_bkg_tile_xy(col2    , row2 + 1, 0x10);
+            set_bkg_tile_xy(col2 + 1, row2 + 1, 0x11);
+
+            // BackgroundTiles[tile_index     ] = tile_id + 0;  // Top    Left.
+            // BackgroundTiles[tile_index + 20] = tile_id + 1;  // Bottom Left.
+            // BackgroundTiles[tile_index +  1] = tile_id + 2;  // Top    Right.
+            // BackgroundTiles[tile_index + 21] = tile_id + 3;  // Bottom Right
+        }
+    }
+}
+
+
+#endif // __GAME_BACKGROUND_C__

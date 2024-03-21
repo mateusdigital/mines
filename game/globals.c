@@ -10,7 +10,7 @@
 //                      O      *        '       .                             //
 //                                                                            //
 //  File      : globals.c                                                     //
-//  Project   : main                                                          //
+//  Project   : mines                                                          //
 //  Date      : 2024-03-21                                                    //
 //  License   : See project's COPYING.TXT for full info.                      //
 //  Author    : mateus.digital <hello@mateus.digital>                         //

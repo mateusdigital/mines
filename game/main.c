@@ -58,11 +58,14 @@
 #include "globals.h"
 #include "globals.c"
 
-#include "menu.h"
-#include "menu.c"
+#include "menu_screen.h"
+#include "menu_screen.c"
 
 #include "hud.h"
 #include "hud.c"
+
+#include "game_background.h"
+#include "game_background.c"
 
 
 //------------------------------------------------------------------------------
@@ -84,8 +87,9 @@ void main(void)
 
     DISPLAY_ON;
 
-    menu_init();
+    menu_screen_init();
     hud_init();
+    game_background_init();
     while (1)
     {
         UPDATE_INPUT();

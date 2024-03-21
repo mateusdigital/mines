@@ -14,7 +14,8 @@
         "menu.h": "c",
         "game_defs.h": "c",
         "menumap.h": "c",
-        "hud.h": "c"
+        "hud.h": "c",
+        "background.h": "c"
     },
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#c1ec25",
