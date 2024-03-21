@@ -35,8 +35,9 @@ Move-Item -Force ./game_tiles* "./game/resources/"
 
 ##------------------------------------------------------------------------------
 ## Create GameBoy Map information from the Tiled.
-tiled-to-map --input-path "./res/MenuMap.tmx" --output-path "./game/resources/MenuMap";
-tiled-to-map --input-path "./res/TestMap.tmx" --output-path "./game/resources/TestMap";
+tiled-to-map --input-path "./res/TestMap.tmx"    --output-path "./game/resources/TestMap";
+tiled-to-map --input-path "./res/MenuMap.tmx"    --output-path "./game/resources/MenuMap";
+tiled-to-map --input-path "./res/CreditsMap.tmx" --output-path "./game/resources/CreditsMap";
 
 
 #------------------------------------------------------------------------------
