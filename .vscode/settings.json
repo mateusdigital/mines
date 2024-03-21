@@ -8,7 +8,13 @@
         "game_tiles_map.h": "c",
         "game_tiles_tiles.h": "c",
         "testmap.h": "c",
-        "gb.h": "c"
+        "gb.h": "c",
+        "mdgb.h": "c",
+        "globals.h": "c",
+        "menu.h": "c",
+        "game_defs.h": "c",
+        "menumap.h": "c",
+        "hud.h": "c"
     },
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#c1ec25",

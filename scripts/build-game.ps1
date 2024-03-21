@@ -39,6 +39,8 @@ tiled-to-map --input-path "./res/TestMap.tmx"    --output-path "./game/resources
 tiled-to-map --input-path "./res/MenuMap.tmx"    --output-path "./game/resources/MenuMap";
 tiled-to-map --input-path "./res/CreditsMap.tmx" --output-path "./game/resources/CreditsMap";
 
+tiled-to-map --input-path "./res/HudWin.tmx" --output-path "./game/resources/HudWin";
+
 
 #------------------------------------------------------------------------------
 ## Compile the game.

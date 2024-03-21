@@ -20,7 +20,8 @@
 //------------------------------------------------------------------------------
 #define TILE_INDEX_BLANK           0x0f
 
-#define TILE_INDEX_LETTERS_UPPER_A 0x30
+#define TILE_INDEX_LETTERS_UPPER_A  0x30
+#define TILE_INDEX_NUMBER_0         0xA0
 
 #define TILE_INDEX_ARROWS_DARK     0x90
 #define TILE_INDEX_ARROWS_LIGHT    0x94

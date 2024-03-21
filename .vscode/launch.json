@@ -4,7 +4,7 @@
             "name": "Launch",
             "type": "PowerShell",
             "request": "launch",
-            "script": "${workspaceFolder}/scripts/start-emu.ps1",
+            // "script": "${workspaceFolder}/scripts/start-emu.ps1",
             "cwd": "${cwd}",
             "preLaunchTask": "Build"
         }

@@ -52,12 +52,18 @@
 #include "resources/CreditsMap.h"
 #include "resources/CreditsMap.c"
 
+#include "resources/HudWin.h"
+#include "resources/HudWin.c"
 
 #include "globals.h"
 #include "globals.c"
 
 #include "menu.h"
 #include "menu.c"
+
+#include "hud.h"
+#include "hud.c"
+
 
 //------------------------------------------------------------------------------
 
@@ -79,7 +85,7 @@ void main(void)
     DISPLAY_ON;
 
     menu_init();
-
+    hud_init();
     while (1)
     {
         UPDATE_INPUT();
