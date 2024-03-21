@@ -1,0 +1,33 @@
+{
+    "files.associations": {
+        "platform.h": "c",
+        "stdint.h": "c",
+        "metasprites.h": "c",
+        "asdf.h": "c",
+        "teste_tiles.h": "c",
+        "game_tiles_map.h": "c",
+        "game_tiles_tiles.h": "c",
+        "testmap.h": "c",
+        "gb.h": "c"
+    },
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#c1ec25",
+        "activityBar.background": "#c1ec25",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "activityBarBadge.background": "#12a5cd",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "commandCenter.border": "#15202b99",
+        "sash.hoverBorder": "#c1ec25",
+        "statusBar.background": "#a4cc12",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.hoverBackground": "#7e9d0e",
+        "statusBarItem.remoteBackground": "#a4cc12",
+        "statusBarItem.remoteForeground": "#15202b",
+        "titleBar.activeBackground": "#a4cc12",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveBackground": "#a4cc1299",
+        "titleBar.inactiveForeground": "#15202b99"
+    },
+    "peacock.color": "#a4cc12"
+}
