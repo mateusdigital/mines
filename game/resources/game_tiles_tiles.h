@@ -5,8 +5,8 @@ Filename: game_tiles_tiles.h
 Tile Header File
 */
 
-#define game_tiles_tiles_count 169
-#define game_tiles_tiles_bytes 2704
+#define game_tiles_tiles_count 176
+#define game_tiles_tiles_bytes 2816
 #define game_tiles_num_pals 1
 // extern const unsigned int game_tiles_pal_cgb[];
 // extern const unsigned char game_tiles_tiles_pals[];
