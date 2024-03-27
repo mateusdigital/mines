@@ -4,3 +4,6 @@
 [submodule "libs/mddos"]
 	path = libs/mddos
 	url = git@github.com:mateusdigital/mddos.git
+[submodule "libs/mdgb"]
+	path = libs/mdgb
+	url = git@github.com:mateusdigital/mdgb
