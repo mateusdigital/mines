@@ -1,12 +1,16 @@
 {
+    "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch",
-            "type": "PowerShell",
+            "name": "C/C++: cl.exe build and debug active file",
+            "type": "cppvsdbg",
             "request": "launch",
-            // "script": "${workspaceFolder}/scripts/start-emu.ps1",
-            "cwd": "${cwd}",
-            "preLaunchTask": "Build"
+            "program": "${workspaceFolder}/out/core/mines.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false
         }
     ]
 }
