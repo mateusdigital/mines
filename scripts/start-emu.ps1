@@ -24,6 +24,6 @@
 $PROJECT_NAME = "mines";
 
 ##------------------------------------------------------------------------------
-./tools/bgb/bgb.exe      `
-    -rom ./build/${PROJECT_NAME}.gb `
+./libs/mdgb/tools/bgb/bgb.exe          `
+    -rom ./build/gb/${PROJECT_NAME}.gb `
     -watch
