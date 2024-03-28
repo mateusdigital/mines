@@ -25,7 +25,7 @@
 #define __GAME_CURSOR__
 
 //------------------------------------------------------------------------------
-#include "mdgb.h"
+#include "mdgb/mdgb.h"
 #include "globals.h"
 #include "game_cursor.h"
 

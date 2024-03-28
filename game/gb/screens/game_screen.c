@@ -24,14 +24,14 @@
 #define __GAME_SCREEN_C__
 
 //------------------------------------------------------------------------------
-#include "game_screen.h"
+#include "screens/game_screen.h"
 
 #include "game_defs.h"
 #include "globals.h"
 
-#include "hud.h"
-#include "game_cursor.h"
-#include "game_background.h"
+#include "ui/hud.h"
+#include "objects/game_cursor.h"
+#include "objects/game_background.h"
 
 //
 // Constants

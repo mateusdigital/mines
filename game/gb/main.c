@@ -25,9 +25,8 @@
 //
 
 // -----------------------------------------------------------------------------
-#include "mdgb.h"
-#include "mdgb.c"
-
+#include "mdgb/mdgb.h"
+#include "mdgb/mdgb.c"
 
 //
 // Tile Data
@@ -58,20 +57,20 @@
 #include "globals.h"
 #include "globals.c"
 
-#include "menu_screen.h"
-#include "menu_screen.c"
+#include "screens/menu_screen.h"
+#include "screens/menu_screen.c"
 
-#include "hud.h"
-#include "hud.c"
+#include "ui/hud.h"
+#include "ui/hud.c"
 
-#include "game_background.h"
-#include "game_background.c"
+#include "objects/game_background.h"
+#include "objects/game_background.c"
 
-#include "game_cursor.h"
-#include "game_cursor.c"
+#include "objects/game_cursor.h"
+#include "objects/game_cursor.c"
 
-#include "game_screen.h"
-#include "game_screen.c"
+#include "screens/game_screen.h"
+#include "screens/game_screen.c"
 
 //------------------------------------------------------------------------------
 

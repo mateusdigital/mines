@@ -24,7 +24,7 @@
 #define __HUD_C__
 
 //------------------------------------------------------------------------------
-#include "hud.h"
+#include "ui/hud.h"
 
 #include "game_defs.h"
 #include "globals.h"

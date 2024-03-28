@@ -24,7 +24,7 @@
 #define __MENU_SCREEN_C__
 
 //------------------------------------------------------------------------------
-#include "menu_screen.h"
+#include "screens/menu_screen.h"
 
 #include "game_defs.h"
 #include "globals.h"

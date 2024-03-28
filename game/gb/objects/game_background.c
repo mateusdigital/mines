@@ -25,7 +25,7 @@
 #define __GAME_BACKGROUND_C__
 
 //------------------------------------------------------------------------------
-#include "mdgb.h"
+#include "mdgb/mdgb.h"
 #include "globals.h"
 #include "game_background.h"
 
