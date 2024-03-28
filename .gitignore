@@ -1,17 +1,19 @@
 build/
 dist/
 
-game/resources/*
-tools/bgb/*
+## Game Boy
+game/gb/resources/*
 
 
 
-.idea/
 *.gb
 *.sav
 .map
 *.s19
 .sym
+
+## Other
+.idea/
 .DS_Store
 
 
