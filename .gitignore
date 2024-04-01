@@ -12,6 +12,9 @@ game/gb/resources/*
 *.s19
 .sym
 
+## DOS
+game/dos/resources/*
+
 ## Other
 .idea/
 .DS_Store

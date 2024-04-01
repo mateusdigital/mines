@@ -28,8 +28,9 @@
 #include "mdgb/mdgb.h"
 #include "globals.h"
 
+
 //------------------------------------------------------------------------------
 void game_background_init();
-
+void game_background_set_offset(i8 offset_x, i8 offset_y);
 
 #endif // __GAME_BACKGROUND_H__

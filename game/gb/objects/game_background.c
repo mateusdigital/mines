@@ -29,8 +29,6 @@
 #include "globals.h"
 #include "game_background.h"
 
-#define FIELD_MAX_ROWS = 16;
-#define FIELD_MAX_COLS = 16;
 
 //------------------------------------------------------------------------------
 void game_background_init()
@@ -55,6 +53,10 @@ void game_background_init()
         }
     }
 }
-
+// -----------------------------------------------------------------------------
+void game_background_set_offset(i8 offset_x, i8 offset_y)
+{
+    move_bkg(offset_x * TILE_SIZE_x2, offset_y * TILE_SIZE_x2);
+}
 
 #endif // __GAME_BACKGROUND_C__

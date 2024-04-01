@@ -23,20 +23,43 @@
 #ifndef __GAME_DEFS_H__
 #define __GAME_DEFS_H__
 
+//
+// Screen
+//
+
 //------------------------------------------------------------------------------
 #define SCREEN_TYPE_SPLASH  0
 #define SCREEN_TYPE_MENU    1
 #define SCREEN_TYPE_GAME    2
 #define SCREEN_TYPE_CREDITS 2
 
+//
+// Level
+//
+
 //------------------------------------------------------------------------------
 #define LEVEL_INDEX_EASY   0
 #define LEVEL_INDEX_MEDIUM 1
 #define LEVEL_INDEX_HARD   2
 
+//
+// Cursor
+//
+
 //------------------------------------------------------------------------------
 #define CURSOR_BLINK_FRAMES_COUNT 0x8
 
+//
+// Field
+//
+
+// -----------------------------------------------------------------------------
+#define FIELD_MAX_ROWS 14
+#define FIELD_MAX_COLS 15
+
+//
+// Tiles
+//
 
 //------------------------------------------------------------------------------
 #define TILE_INDEX_BLANK           0x0f
@@ -56,7 +79,6 @@
 
 //------------------------------------------------------------------------------
 #define CHAR_TO_TILE(C) (TILE_INDEX_LETTERS_UPPER_A + C - 'A')
-
 
 
 #endif // __GAME_DEFS_H__
