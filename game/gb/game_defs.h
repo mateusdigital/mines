@@ -48,6 +48,18 @@
 
 //------------------------------------------------------------------------------
 #define CURSOR_BLINK_FRAMES_COUNT 0x8
+#define CURSOR_SPRITE_INDEX 0
+#define CURSOR_SPRITE_COUNT 4
+
+//
+// Explosion
+//
+
+// -----------------------------------------------------------------------------
+#define EXPLOSION_SPRITE_INDEX CURSOR_SPRITE_COUNT
+#define EXPLOSION_SPRITE_COUNT 4
+
+
 
 //
 // Field
@@ -56,6 +68,7 @@
 // -----------------------------------------------------------------------------
 #define FIELD_MAX_ROWS 14
 #define FIELD_MAX_COLS 15
+#define FIELD_ARRAY_SIZE (FIELD_MAX_ROWS * FIELD_MAX_COLS)
 
 //
 // Tiles
@@ -76,6 +89,19 @@
 
 #define TILE_INDEX_HEART_DARK  0x0E
 #define TILE_INDEX_HEART_LIGHT 0x1E
+
+
+#define TILE_INDEX_BLOCK_TL 0x00
+#define TILE_INDEX_BLOCK_TR 0x01
+#define TILE_INDEX_BLOCK_BL 0x10
+#define TILE_INDEX_BLOCK_BR 0x11
+
+#define TILE_INDEX_BLOCK_OPEN_TL 0x02
+#define TILE_INDEX_BLOCK_OPEN_TR 0x03
+#define TILE_INDEX_BLOCK_OPEN_BL 0x12
+#define TILE_INDEX_BLOCK_OPEN_BR 0x13
+
+#define TILE_INDEX_BLOCK_OPEN_BL_0 0x20
 
 //------------------------------------------------------------------------------
 #define CHAR_TO_TILE(C) (TILE_INDEX_LETTERS_UPPER_A + C - 'A')
