@@ -27,6 +27,7 @@ $PROJECT_NAME = "mines";
 $RES_DIR   = "res/gb";
 $TOOLS_DIR = "libs/mdgb/tools";
 $GAME_DIR  = "game/gb";
+$CORE_DIR  = "game/core";
 $MDGB_DIR  = "libs/mdgb";
 $GBDK_DIR  = "${MDGB_DIR}/libs/gbdk";
 $BUILD_DIR = "build/gb";
@@ -57,17 +58,17 @@ if($BUILD_ASSETS) {
 
 }
 ## Compile the game.
-& "${GBDK_DIR}/bin/lcc "         `
-    -I"${GAME_DIR}" -I"${MDGB_DIR}" `
-    -Wm-yc -c                       `
-    -o "${BUILD_DIR}/main.o"        `
-    "${GAME_DIR}/main.c"            ;
+& "${GBDK_DIR}/bin/lcc "                         `
+   -I"${GAME_DIR}" -I"${CORE_DIR}" -I"${MDGB_DIR}" `
+    -Wm-yc -c                                    `
+    -o "${BUILD_DIR}/main.o"                     `
+    "${GAME_DIR}/main.c"                         ;
 
-& "${GBDK_DIR}/bin/lcc"               `
-   -I"${GAME_DIR}" -I"${MDGB_DIR}"       `
-   -Wa-l -Wl-m -Wl-j                     `
-   -o "${BUILD_DIR}/${PROJECT_NAME}.gb"  `
-   "${BUILD_DIR}/main.o"                 ;
+& "${GBDK_DIR}/bin/lcc"                          `
+   -I"${GAME_DIR}" -I"${CORE_DIR}" -I"${MDGB_DIR}" `
+   -Wa-l -Wl-m -Wl-j                             `
+   -o "${BUILD_DIR}/${PROJECT_NAME}.gb"          `
+   "${BUILD_DIR}/main.o"                         ;
 
 
 # ./libs/mdgb/libs/gbdk/bin/lcc  -Igame/gb -Ilibs/mdgb -Wm-yc -c -o ./build/gb/main.o ./game/gb/main.c
