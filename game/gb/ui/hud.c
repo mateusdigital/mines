@@ -28,6 +28,7 @@
 
 #include "game_defs.h"
 #include "globals.h"
+#include "Field.h"
 #include "resources/HudWin.h"
 
 //
@@ -60,18 +61,18 @@
 // -----------------------------------------------------------------------------
 void hud_init()
 {
-    set_win_tiles(0,0, HudWin_WIDTH, HudWin_HEIGHT, HudWin_TILES);
+    set_win_tiles(0, 0, HudWin_WIDTH, HudWin_HEIGHT, HudWin_TILES);
     move_win(FIRST_PIXEL_X -1, SCREEN_HEIGHT - HudWin_HEIGHT * TILE_SIZE);
 
     SHOW_WIN;
 
     hud_set_time (0);
-    hud_set_mines(0);
+    hud_set_mines(FieldMinesCount);
     hud_set_score(0);
 }
 
 //------------------------------------------------------------------------------
-void hud_draw()
+void hud_update()
 {
 
 }

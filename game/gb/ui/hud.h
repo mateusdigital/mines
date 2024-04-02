@@ -28,7 +28,7 @@
 
 //------------------------------------------------------------------------------
 void hud_init(void);
-void hud_draw(void);
+void hud_update(void);
 
 void hud_set_time (u16 time);
 void hud_set_mines(u16 mines);
