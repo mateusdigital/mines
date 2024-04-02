@@ -81,7 +81,7 @@ void _update_icons();
 // -----------------------------------------------------------------------------
 void menu_screen_init()
 {
-    curr_screen_func = &menu_screen_draw;
+    curr_screen_func = &menu_screen_update;
 
     set_bkg_tiles(0, 0, MenuMap_WIDTH, MenuMap_HEIGHT, MenuMap_TILES);
     move_bkg(0, 0);
@@ -93,7 +93,7 @@ void menu_screen_init()
 }
 
 //------------------------------------------------------------------------------
-void menu_screen_draw()
+void menu_screen_update()
 {
     if(_selecting_level && JUST_PRESSED(J_LEFT)) {
         if(curr_level > 0) {

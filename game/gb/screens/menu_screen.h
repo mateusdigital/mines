@@ -28,6 +28,6 @@
 
 //------------------------------------------------------------------------------
 void menu_screen_init(void);
-void menu_screen_draw(void);
+void menu_screen_update(void);
 
 #endif // __MENU_SCREEN_H__
