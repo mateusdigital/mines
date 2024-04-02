@@ -30,7 +30,14 @@
 
 
 //------------------------------------------------------------------------------
+extern i8 BackgroundOffsetX;
+extern i8 BackgroundOffsetY;
+
+//------------------------------------------------------------------------------
 void game_background_init();
+void game_background_update();
+
 void game_background_set_offset(i8 offset_x, i8 offset_y);
+void game_background_open_tile_xy(u8 x, u8 y);
 
 #endif // __GAME_BACKGROUND_H__

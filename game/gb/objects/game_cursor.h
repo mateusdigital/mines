@@ -29,8 +29,12 @@
 #include "globals.h"
 
 //------------------------------------------------------------------------------
-void game_cursor_init();
-void game_cursor_draw();
+extern i8 CursorX;
+extern i8 CursorY;
+
+//------------------------------------------------------------------------------
+void game_cursor_init  ();
+void game_cursor_update();
 
 
 #endif // __GAME_CURSOR_H__

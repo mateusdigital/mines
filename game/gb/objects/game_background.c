@@ -25,38 +25,69 @@
 #define __GAME_BACKGROUND_C__
 
 //------------------------------------------------------------------------------
-#include "mdgb/mdgb.h"
-#include "globals.h"
 #include "game_background.h"
+//
+#include "mdgb/mdgb.h"
+//
+#include "globals.h"
+//
+#include "Field.h"
 
+//------------------------------------------------------------------------------
+i8 BackgroundOffsetX = 0;
+i8 BackgroundOffsetY = 0;
+
+
+//------------------------------------------------------------------------------
+void _set_block_close_xy(u8 x, u8 y)
+{
+    x *= 2;
+    y *= 2;
+
+    set_bkg_tile_xy(x    , y    , TILE_INDEX_BLOCK_TL);
+    set_bkg_tile_xy(x + 1, y    , TILE_INDEX_BLOCK_TR);
+    set_bkg_tile_xy(x    , y + 1, TILE_INDEX_BLOCK_BL);
+    set_bkg_tile_xy(x + 1, y + 1, TILE_INDEX_BLOCK_BR);
+}
+
+void _set_block_open_xy(u8 x, u8 y, u8 value)
+{
+    x *= 2;
+    y *= 2;
+    u8 mines_value = MINES_VALUE(value);
+    u8 value_block_index = (mines_value == 0)
+        ? TILE_INDEX_BLOCK_OPEN_BL
+        : (TILE_INDEX_BLOCK_OPEN_BL_0 + mines_value);
+
+    set_bkg_tile_xy(x    , y    , TILE_INDEX_BLOCK_OPEN_TL);
+    set_bkg_tile_xy(x + 1, y    , TILE_INDEX_BLOCK_OPEN_TR);
+    set_bkg_tile_xy(x    , y + 1, value_block_index);
+    set_bkg_tile_xy(x + 1, y + 1, TILE_INDEX_BLOCK_OPEN_BR);
+}
 
 //------------------------------------------------------------------------------
 void game_background_init()
 {
-    u8 field_cols = 16;
-    u8 field_rows = 16;
-
-    for(u8 row = 0; row < field_rows; ++row) {
-        u8 row2 = row * 2;
-        for(u8 col = 0; col < field_cols; ++col) {
-            u8 col2 = col * 2;
-
-            set_bkg_tile_xy(col2    , row2    , 0x00);
-            set_bkg_tile_xy(col2 + 1, row2    , 0x01);
-            set_bkg_tile_xy(col2    , row2 + 1, 0x10);
-            set_bkg_tile_xy(col2 + 1, row2 + 1, 0x11);
-
-            // BackgroundTiles[tile_index     ] = tile_id + 0;  // Top    Left.
-            // BackgroundTiles[tile_index + 20] = tile_id + 1;  // Bottom Left.
-            // BackgroundTiles[tile_index +  1] = tile_id + 2;  // Top    Right.
-            // BackgroundTiles[tile_index + 21] = tile_id + 3;  // Bottom Right
+    for(u8 row = 0; row < FieldRows; ++row) {
+        for(u8 col = 0; col < FieldCols; ++col) {
+            // _set_block_close_xy(col, row);
+            _set_block_open_xy(col, row, Field_GetXY(col, row));
         }
     }
 }
+
+
 // -----------------------------------------------------------------------------
-void game_background_set_offset(i8 offset_x, i8 offset_y)
+void game_background_update()
 {
-    move_bkg(offset_x * TILE_SIZE_x2, offset_y * TILE_SIZE_x2);
+    move_bkg(BackgroundOffsetX * TILE_SIZE_x2, BackgroundOffsetY * TILE_SIZE_x2);
+}
+
+
+// -----------------------------------------------------------------------------
+void game_background_open_tile_xy(u8 x, u8 y)
+{
+    _set_block_open_xy(x, y, Field_GetXY(x, y));
 }
 
 #endif // __GAME_BACKGROUND_C__

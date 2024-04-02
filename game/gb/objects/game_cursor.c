@@ -26,18 +26,20 @@
 
 //------------------------------------------------------------------------------
 #include "mdgb/mdgb.h"
+//
 #include "game_defs.h"
 #include "globals.h"
+//
 #include "game_cursor.h"
 #include "game_background.h"
+#include "Field.h"
 
 
 // -----------------------------------------------------------------------------
-#define _CURSOR_TILE_INDEX 0
-#define _CURSOR_SPR_INDEX_TOP_LEFT     0x04
-#define _CURSOR_SPR_INDEX_TOP_RIGHT    0x05
-#define _CURSOR_SPR_INDEX_BOTTOM_LEFT  0x14
-#define _CURSOR_SPR_INDEX_BOTTOM_RIGHT 0x15
+#define _CURSOR_TILE_INDEX_TOP_LEFT     0x04
+#define _CURSOR_TILE_INDEX_TOP_RIGHT    0x05
+#define _CURSOR_TILE_INDEX_BOTTOM_LEFT  0x14
+#define _CURSOR_TILE_INDEX_BOTTOM_RIGHT 0x15
 
 // -----------------------------------------------------------------------------
 #define CURSOR_MIN_X 0
@@ -47,22 +49,20 @@
 #define CURSOR_MAX_Y 7
 
 // -----------------------------------------------------------------------------
-i8 _cursor_x = 0;
-i8 _cursor_y = 0;
-
-i8 _background_offset_x = 0;
-i8 _background_offset_y = 0;
+i8 CursorX;
+i8 CursorY;
 
 
+//------------------------------------------------------------------------------
 void _move_cur()
 {
-    u8 x = _cursor_x * TILE_SIZE_x2 + FIRST_PIXEL_X;
-    u8 y = _cursor_y * TILE_SIZE_x2 + FIRST_PIXEL_Y;
+    u8 x = CursorX * TILE_SIZE_x2 + FIRST_PIXEL_X;
+    u8 y = CursorY * TILE_SIZE_x2 + FIRST_PIXEL_Y;
 
-    move_sprite(_CURSOR_TILE_INDEX + 0, x            , y);
-    move_sprite(_CURSOR_TILE_INDEX + 1, x + TILE_SIZE, y);
-    move_sprite(_CURSOR_TILE_INDEX + 2, x            , y+ TILE_SIZE);
-    move_sprite(_CURSOR_TILE_INDEX + 3, x + TILE_SIZE, y+ TILE_SIZE);
+    move_sprite(CURSOR_SPRITE_INDEX + 0, x            , y);
+    move_sprite(CURSOR_SPRITE_INDEX + 1, x + TILE_SIZE, y);
+    move_sprite(CURSOR_SPRITE_INDEX + 2, x            , y + TILE_SIZE);
+    move_sprite(CURSOR_SPRITE_INDEX + 3, x + TILE_SIZE, y + TILE_SIZE);
 }
 
 //
@@ -72,54 +72,52 @@ void _move_cur()
 //------------------------------------------------------------------------------
 void game_cursor_init()
 {
-    set_sprite_tile(_CURSOR_TILE_INDEX + 0, _CURSOR_SPR_INDEX_TOP_LEFT);
-    set_sprite_tile(_CURSOR_TILE_INDEX + 1, _CURSOR_SPR_INDEX_TOP_RIGHT);
-    set_sprite_tile(_CURSOR_TILE_INDEX + 2, _CURSOR_SPR_INDEX_BOTTOM_LEFT);
-    set_sprite_tile(_CURSOR_TILE_INDEX + 3, _CURSOR_SPR_INDEX_BOTTOM_RIGHT);
+    set_sprite_tile(CURSOR_SPRITE_INDEX + 0, _CURSOR_TILE_INDEX_TOP_LEFT);
+    set_sprite_tile(CURSOR_SPRITE_INDEX + 1, _CURSOR_TILE_INDEX_TOP_RIGHT);
+    set_sprite_tile(CURSOR_SPRITE_INDEX + 2, _CURSOR_TILE_INDEX_BOTTOM_LEFT);
+    set_sprite_tile(CURSOR_SPRITE_INDEX + 3, _CURSOR_TILE_INDEX_BOTTOM_RIGHT);
 
     _move_cur();
 }
 
 //------------------------------------------------------------------------------
-void game_cursor_draw()
+void game_cursor_update()
 {
     if(JUST_PRESSED(J_LEFT)) {
-        --_cursor_x;
+        --CursorX;
     }
     if(JUST_PRESSED(J_RIGHT)) {
-        ++_cursor_x;
+        ++CursorX;
     }
     if(JUST_PRESSED(J_UP)) {
-        --_cursor_y;
+        --CursorY;
     }
     if(JUST_PRESSED(J_DOWN)) {
-        ++_cursor_y;
+        ++CursorY;
     }
 
-    if(_cursor_x > CURSOR_MAX_X) {
-        _background_offset_x += 1;
-        _cursor_x             = CURSOR_MAX_X;
+    if(CursorX > CURSOR_MAX_X) {
+        BackgroundOffsetX += 1;
+        CursorX            = CURSOR_MAX_X;
     }
-    else if(_cursor_x < CURSOR_MIN_X) {
-        _background_offset_x -= 1;
-        _cursor_x             = CURSOR_MIN_X;
-    }
-
-    if(_cursor_y > CURSOR_MAX_Y) {
-        _background_offset_y += 1;
-        _cursor_y             = CURSOR_MAX_Y;
-    }
-    else if(_cursor_y < CURSOR_MIN_Y) {
-        _background_offset_y -= 1;
-        _cursor_y             = CURSOR_MIN_Y;
+    else if(CursorX < CURSOR_MIN_X) {
+        BackgroundOffsetX -= 1;
+        CursorX            = CURSOR_MIN_X;
     }
 
-    _background_offset_x = Clamp(_background_offset_x, 0, FIELD_MAX_COLS - CURSOR_MAX_X);
-    _background_offset_y = Clamp(_background_offset_y, 0, FIELD_MAX_ROWS - CURSOR_MAX_Y);
+    if(CursorY > CURSOR_MAX_Y) {
+        BackgroundOffsetY += 1;
+        CursorY            = CURSOR_MAX_Y;
+    }
+    else if(CursorY < CURSOR_MIN_Y) {
+        BackgroundOffsetY -= 1;
+        CursorY            = CURSOR_MIN_Y;
+    }
 
+    BackgroundOffsetX = Clamp(BackgroundOffsetX, 0, FieldCols - CURSOR_MAX_X);
+    BackgroundOffsetY = Clamp(BackgroundOffsetY, 0, FieldRows - CURSOR_MAX_Y);
 
-    // printf("%d %d\n", _background_offset_x, _background_offset_y);
-    game_background_set_offset(_background_offset_x, _background_offset_y);
+    // printf("%d %d\n", BackgroundOffsetX, BackgroundOffsetY);
     _move_cur();
 }
 
