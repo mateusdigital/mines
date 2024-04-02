@@ -28,6 +28,6 @@
 
 //------------------------------------------------------------------------------
 void game_screen_init(void);
-void game_screen_draw(void);
+void game_screen_update(void);
 
 #endif // __GAME_SCREEN_H__
