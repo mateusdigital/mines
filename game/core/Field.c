@@ -1,5 +1,5 @@
 // Header
-#include "mines.h"
+#include "Field.h"
 
 //----------------------------------------------------------------------------//
 // MACROS                                                                     //
@@ -77,7 +77,7 @@ void _Field_PlaceMines()
             continue;
         }
 
-        flushprint("Placing mine %d %d\n", i, j);
+        // flushprint("Placing mine %d %d\n", i, j);
         Field[index] |= MASK_BOMB;
         _Field_PlaceMine(i, j);
 
@@ -181,6 +181,19 @@ void Field_Init(u8 rows, u8 cols, u8 minesCount)
 
 
 // -----------------------------------------------------------------------------
+u8 Field_GetXY(u8 x, u8 y)
+{
+    return Field[FIELD_INDEX(y, x)];
+}
+
+// -----------------------------------------------------------------------------
+void Field_IndexToXY(u8 index, u8 *x, u8 *y)
+{
+    *y = (index / FieldCols);
+    *x = (index % FieldCols);
+}
+
+// -----------------------------------------------------------------------------
 void Field_PrintDebug(bool showOpen)
 {
     u8 i, j;
@@ -191,18 +204,18 @@ void Field_PrintDebug(bool showOpen)
         for(j = 0; j < FieldCols; ++j) {
             field_value = Field[FIELD_INDEX(i, j)];
             if(showOpen && HAS_BOMB(field_value)) {
-                flushprint("*");
+                flushprint("%s", "*");
             }
             else if(IS_FLAGGED(field_value)) {
-                flushprint("F");
+                flushprint("%s", "F");
             } else if(showOpen || IS_OPENED(field_value)) {
                 flushprint("%c", '0' + MINES_VALUE(field_value));
                 //  '0' + MINES_VALUE(field_value);
             } else {
-                flushprint(".");
+                flushprint("%s", ".");
             }
         }
-        flushprint("\n");
+        flushprint("%s", "\n");
     }
 }
 
